@@ -11,18 +11,21 @@ class Todo {
   String id;
   String title;
   bool completed;
+  DateTime createdAt;
 
-  Todo({@required this.title, this.completed = false});
+  Todo({@required this.title, this.completed = false, this.createdAt});
 
   Todo.fromMap(Map snapshot,String id) :
         id = id ?? '',
         title = snapshot['title'] ?? '',
-        completed = snapshot['complated'] ?? '';
+        completed = snapshot['completed'] ?? false,
+        createdAt = snapshot['createdAt'].toDate() ?? null;
 
   toJson() {
     return {
       "title": title,
       "completed": completed,
+      "createdAt": createdAt,
     };
   }
 
@@ -40,15 +43,16 @@ class TodoModel extends ChangeNotifier{
     await databaseReference.document().setData({
       'title' : todo.title,
       'completed' : todo.completed,
+      'createdAt' : DateTime.now(),
     });
   }
-
-  Stream getAll(){
-    return databaseReference.snapshots();
+  void createRecord2(Todo todo) async {
+    todo.createdAt = DateTime.now();
+    await _api.addDocument(todo.toJson());
   }
 
-  Stream<QuerySnapshot> fetchProductsAsStream() {
-    return _api.streamDataCollection();
+  Stream<QuerySnapshot> fetchTodosAsStreamOrderByCreatedAt() {
+    return _api.streamDataCollectionOrderByCreatedAt();
   }
 
   Future<Todo> getProductById(String id) async {
@@ -58,6 +62,12 @@ class TodoModel extends ChangeNotifier{
 
   Future removeTodo(String id) async{
     await _api.removeDocument(id) ;
+    return ;
+  }
+
+  Future updateTodo(Todo data,String id) async{
+    data.completed = !data.completed;
+    await _api.updateDocument(data.toJson(), id) ;
     return ;
   }
 

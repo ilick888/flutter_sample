@@ -18,12 +18,10 @@ class TodoEdit extends StatelessWidget {
             children: [
               inputText(),
               RaisedButton(
-                child: Icon(Icons.remove),
-                color: Colors.blue,
+                child: Icon(Icons.add),
                 onPressed: (){
-                  Todo todo = new Todo(title: textController.text);
+                  catalog.createRecord2(Todo(title : textController.text));
                   Navigator.of(context).pop();
-                  catalog.createRecord(todo);
                 },
               ),
             ]

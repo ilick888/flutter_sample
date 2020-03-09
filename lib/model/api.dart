@@ -17,6 +17,9 @@ class Api{
   Stream<QuerySnapshot> streamDataCollection() {
     return ref.snapshots() ;
   }
+  Stream<QuerySnapshot> streamDataCollectionOrderByCreatedAt() {
+    return ref.orderBy('createdAt').snapshots() ;
+  }
   Future<DocumentSnapshot> getDocumentById(String id) {
     return ref.document(id).get();
   }
@@ -29,6 +32,4 @@ class Api{
   Future<void> updateDocument(Map data , String id) {
     return ref.document(id).updateData(data);
   }
-
-
 }

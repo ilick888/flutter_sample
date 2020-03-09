@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example_app/model/todo.dart';
 import 'package:flutter/material.dart';
@@ -25,41 +24,37 @@ class BottomFloatButton extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(context, '/todoEdit');
           },
-        ));
+        )
+    );
   }
 }
 
 class Body extends StatelessWidget {
-
-  var catalog = TodoModel();
+  List<Todo> todos;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TodoModel>(
-      builder: (context, todos, child) {
-        return StreamBuilder(
-          stream: todos.fetchProductsAsStream(),
-          builder: (context, snapshot){
-            if(snapshot.data == null){
-              return Center( child: CircularProgressIndicator());
-            }
-            return lv(snapshot.data.documents);
-          },
-        );
+    final todoProvider = Provider.of<TodoModel>(context);
+    return StreamBuilder(
+      stream: todoProvider.fetchTodosAsStreamOrderByCreatedAt(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        todos = snapshot.data.documents.map((doc) => Todo.fromMap(doc.data, doc.documentID)).toList();
+        return ListView(
+            children: todos.map((f) => Card(child: 
+            ListTile(
+              title: Text(f.title), 
+              subtitle: Text(f.createdAt.toIso8601String()),
+              trailing: f.completed ? Icon(Icons.check_circle) : null,
+              onTap: (){
+                todoProvider.updateTodo(f, f.id);
+                },
+              onLongPress: (){
+                todoProvider.removeTodo(f.id);
+                },
+              )
+            )
+            ).toList());
       },
     );
   }
-
-  List<Widget> tl (List<DocumentSnapshot> todo){
-    return todo.map((f) => Card(child:ListTile(title : Text(f['title']), subtitle: Text(f['completed'].toString()),))).toList();
-  }
-
-  Widget lv(List<DocumentSnapshot> todo) {
-    return ListView(
-      children: tl(todo),
-    );
-  }
-
 }
-
-

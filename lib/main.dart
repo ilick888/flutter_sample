@@ -9,7 +9,6 @@ import 'model/todo.dart';
 import 'screen/login.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   runApp(MyApp());
 }

@@ -41,7 +41,7 @@ class FrontBody extends StatelessWidget {
               height: 20,
             ),
             RaisedButton(
-              color: Colors.red[200],
+              color: Colors.blue[200],
               child: Container(
                 padding: EdgeInsets.only(right: 100, left: 100),
                 child: Text('ログイン', style: TextStyle(fontSize: 12),),
