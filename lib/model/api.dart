@@ -20,6 +20,9 @@ class Api{
   Stream<QuerySnapshot> streamDataCollectionOrderByCreatedAt() {
     return ref.orderBy('createdAt').snapshots() ;
   }
+  Future<QuerySnapshot> getDataCollectionWhere(String uid ,String where) {
+    return ref.where(where, isEqualTo: uid).getDocuments();
+  }
   Future<DocumentSnapshot> getDocumentById(String id) {
     return ref.document(id).get();
   }

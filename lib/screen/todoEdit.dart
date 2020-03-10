@@ -20,7 +20,7 @@ class TodoEdit extends StatelessWidget {
               RaisedButton(
                 child: Icon(Icons.add),
                 onPressed: (){
-                  catalog.createRecord2(Todo(title : textController.text));
+                  catalog.createRecord(Todo(title : textController.text));
                   Navigator.of(context).pop();
                 },
               ),

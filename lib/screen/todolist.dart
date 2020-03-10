@@ -38,6 +38,7 @@ class Body extends StatelessWidget {
     return StreamBuilder(
       stream: todoProvider.fetchTodosAsStreamOrderByCreatedAt(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if(snapshot.data == null){return CircularProgressIndicator();}
         todos = snapshot.data.documents.map((doc) => Todo.fromMap(doc.data, doc.documentID)).toList();
         return ListView(
             children: todos.map((f) => Card(child: 
@@ -49,6 +50,7 @@ class Body extends StatelessWidget {
                 todoProvider.updateTodo(f, f.id);
                 },
               onLongPress: (){
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text(f.title + ' deleted')));
                 todoProvider.removeTodo(f.id);
                 },
               )

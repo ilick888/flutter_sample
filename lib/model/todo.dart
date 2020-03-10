@@ -1,8 +1,5 @@
 
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:example_app/locater.dart';
 import 'package:flutter/material.dart';
 
 import 'api.dart';
@@ -33,20 +30,11 @@ class Todo {
 
 class TodoModel extends ChangeNotifier{
 
-  Api _api = locator<Api>();
+  Api _api = Api('todo');
   List<Todo> todos;
 
-  final databaseReference = Firestore.instance.collection('todo');
 
-
-  void createRecord(todo) async {
-    await databaseReference.document().setData({
-      'title' : todo.title,
-      'completed' : todo.completed,
-      'createdAt' : DateTime.now(),
-    });
-  }
-  void createRecord2(Todo todo) async {
+  void createRecord(Todo todo) async {
     todo.createdAt = DateTime.now();
     await _api.addDocument(todo.toJson());
   }

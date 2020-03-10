@@ -1,4 +1,4 @@
-import 'package:example_app/locater.dart';
+
 import 'package:example_app/screen/todoEdit.dart';
 import 'package:example_app/screen/todolist.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,6 @@ import 'model/todo.dart';
 import 'screen/login.dart';
 
 void main() {
-  setupLocator();
   runApp(MyApp());
 }
 
