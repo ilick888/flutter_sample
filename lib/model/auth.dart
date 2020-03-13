@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 
-class googleAuth {
+class GoogleAuth {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseUser _firebaseUser;
 
   Future<FirebaseUser> handleSignIn() async {
  
@@ -41,7 +42,9 @@ class googleAuth {
     print("User Sign Out");
   }
 
-  Future<FirebaseUser> getCurrentUser() async{
-    return await Future.value(_auth.currentUser());
+  String getCurrentUser() {
+    FirebaseAuth.instance.currentUser().then((user){
+      return user.uid;
+    });
   }
 }

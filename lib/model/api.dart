@@ -35,4 +35,7 @@ class Api{
   Future<void> updateDocument(Map data , String id) {
     return ref.document(id).updateData(data);
   }
+  Stream<QuerySnapshot> getMessageCollectionWhereOrderByCreatedAt(List member) {
+    return ref.orderBy('createdAt',descending: true).snapshots();
+  }
 }

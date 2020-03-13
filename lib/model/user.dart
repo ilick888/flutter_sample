@@ -47,5 +47,8 @@ class UserModel extends ChangeNotifier{
     result.documents.isEmpty ? _api.addDocument(user.toJson()) : print(result.documents[0]['uid']);
   }
 
+  Stream<QuerySnapshot> fetchUsersAsStream() {
+    return _api.streamDataCollection();
+  }
 
 }

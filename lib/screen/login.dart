@@ -1,8 +1,11 @@
 
 import 'package:example_app/model/auth.dart';
+import 'package:example_app/screen/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'chat.dart';
 
 class MyLogin extends StatelessWidget {
   @override
@@ -22,6 +25,13 @@ class FrontBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    user = GoogleAuth().handleSignIn();
+    user.then((user) =>
+    user == null ?
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text('please login'))) :
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserList(currentUser: user)))
+    );
+
     return Center(
       child: Container(
         padding: EdgeInsets.all(40),
@@ -36,9 +46,11 @@ class FrontBody extends StatelessWidget {
                 child: Text('Google SignIn', style: TextStyle(fontSize: 12),),
               ),
               onPressed: (){
-                user = Future.value(googleAuth().handleSignIn());
+                user = GoogleAuth().handleSignIn();
                 user.then((user) => 
-                  user == null ?  Scaffold.of(context).showSnackBar(SnackBar(content: Text('please login'))) : Navigator.pushNamed(context, '/todoList')
+                  user == null ?
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text('please login'))) :
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserList(currentUser: user)))
                 );
                 },
               shape: StadiumBorder(),
