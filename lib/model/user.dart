@@ -10,16 +10,20 @@ class User {
   String uid;
   String displayName;
   String email;
+  String phoneNumber;
+  String photoUrl;
   DateTime createdAt;
 
 
-  User({@required this.uid, this.createdAt, this.displayName, this.email});
+  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl});
 
   User.fromMap(Map snapshot,String id) :
         id = id ?? '',
         uid = snapshot['uid'] ?? '',
         displayName = snapshot['displayName'] ?? '',
         email = snapshot['email'],
+        phoneNumber = snapshot['phoneNumber'] ?? '',
+        photoUrl = snapshot['photoUrl'] ?? '',
         createdAt = snapshot['createdAt'].toDate() ?? null;
 
   toJson() {
@@ -27,6 +31,8 @@ class User {
       "uid": uid,
       "displayName" : displayName,
       "email" : email,
+      "phoneNumber" : phoneNumber,
+      "photoUrl" : photoUrl,
       "createdAt": createdAt,
     };
   }
@@ -41,6 +47,8 @@ class UserModel extends ChangeNotifier{
       uid: firebaseUser.uid,
       displayName: firebaseUser.displayName,
       email: firebaseUser.email,
+      phoneNumber: firebaseUser.phoneNumber,
+      photoUrl: firebaseUser.photoUrl,
       createdAt: DateTime.now(),
     );
     final QuerySnapshot result = await Future.value(_api.getDataCollectionWhere(user.uid, 'uid'));

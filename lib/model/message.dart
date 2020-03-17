@@ -1,6 +1,5 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:example_app/model/user.dart';
 import 'package:flutter/material.dart';
 
 import 'api.dart';
@@ -45,8 +44,11 @@ class MessageModel extends ChangeNotifier{
   }
 
   Stream<QuerySnapshot> fetchMessagesAsStreamOrderByCreatedAt(String to, String from) {
-    print(to + ' ' + from);
     return _api.getMessageCollectionWhereOrderByCreatedAt([to,from]);
   }
 
+  Future removeMessage(String id) async{
+    await _api.removeDocument(id) ;
+    return ;
+  }
 }

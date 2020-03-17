@@ -1,3 +1,4 @@
+import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example_app/model/message.dart';
 import 'package:example_app/model/user.dart';
@@ -7,56 +8,31 @@ import 'package:provider/provider.dart';
 
 class Chat extends StatelessWidget {
   final textController = TextEditingController();
-  final User user;
-  final FirebaseUser currentUser;
+  User user;
+  FirebaseUser currentUser;
   List<Message> messages;
 
-  Chat({Key key, this.user, this.currentUser}) : super(key: key);
+  Chat({this.user, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
+    print('to:' + user.displayName);
+    print('currentUser:' + currentUser.displayName);
     final MessageModel messageModel = Provider.of<MessageModel>(context);
 
     return Scaffold(
         appBar: AppBar(title: Text('To ' + user.displayName)),
         body: Padding(
           child: Column(children: [
-            Expanded(child: content(context, messageModel)),
+            Expanded(
+                child: ChatList(
+              user: user,
+              currentUser: currentUser,
+            )),
             bottom(messageModel)
-          ]
-              //content(context,messageModel)
-              ),
+          ]),
           padding: EdgeInsets.all(10),
         ));
-  }
-
-  Widget content(context, MessageModel messageModel) {
-    return StreamBuilder(
-      stream: messageModel.fetchMessagesAsStreamOrderByCreatedAt(
-          user.uid, currentUser.uid),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data.documents == null) {
-          return CircularProgressIndicator();
-        }
-        messages = snapshot.data.documents
-            .map((doc) => Message.fromMap(doc.data, doc.documentID))
-            .toList();
-        return ListView(
-          reverse: true,
-          children: messages
-              .map((f) => Card(
-                  child: f.member.contains(user.uid) &&
-                          f.member.contains(currentUser.uid)
-                      ? ListTile(
-                          title: Text(f.message),
-                          leading: f.from == currentUser.uid
-                              ? Text('自分')
-                              : Text(user.displayName))
-                      : null))
-              .toList(),
-        );
-      },
-    );
   }
 
   Widget bottom(MessageModel messageModel) {
@@ -64,7 +40,7 @@ class Chat extends StatelessWidget {
       Container(
           decoration: BoxDecoration(color: Colors.white),
           padding:
-              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 20.0),
+              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
           child: Row(
             children: <Widget>[
               Flexible(
@@ -86,7 +62,9 @@ class Chat extends StatelessWidget {
                           from: currentUser.uid,
                           message: textController.text));
                     }
-                    textController..clearComposing()..clear();
+                    textController
+                      ..clearComposing()
+                      ..clear();
                   },
                   child: Text('送信'),
                 ),
@@ -94,5 +72,94 @@ class Chat extends StatelessWidget {
             ],
           )),
     ]);
+  }
+}
+
+class ChatList extends StatelessWidget {
+  final User user;
+  final FirebaseUser currentUser;
+  List<Message> messages;
+
+  ChatList({@required this.user, @required this.currentUser});
+
+  @override
+  Widget build(BuildContext context) {
+    final MessageModel messageModel = Provider.of<MessageModel>(context);
+    return StreamBuilder(
+      stream: messageModel.fetchMessagesAsStreamOrderByCreatedAt(
+          user.uid, currentUser.uid),
+      builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        messages = snapshot.data.documents
+            .map((doc) => Message.fromMap(doc.data, doc.documentID))
+            .toList();
+        return ListView(
+          reverse: true,
+          children: messages
+              .map((f) => f.member.contains(user.uid) &&
+                      f.member.contains(currentUser.uid)
+                  ? Container(
+                      padding: EdgeInsets.only(top: 5, bottom: 5),
+                      child: ListTile(
+                          leading: Container(
+                            width: 40,
+                            height: 40,
+                            child: f.from != currentUser.uid
+                                ? ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                    child: Image.network(user.photoUrl),
+                                  )
+                                : null,
+                          ),
+                          title: Bubble(
+                            alignment: f.from != currentUser.uid
+                                ? Alignment.topLeft
+                                : Alignment.topRight,
+                            child: InkWell(
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                child: Text(f.message,
+                                  style: TextStyle(fontSize: 17)),
+                              ),
+                              onLongPress: () async{
+                                var result = await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context){
+                                      return AlertDialog(
+                                        content: Text('本当に削除しますか'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('いいえ'),
+                                            onPressed: (){
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('はい'),
+                                            onPressed: (){
+                                              messageModel.removeMessage(f.id);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+
+                                        ],
+                                      );
+                                    }
+                                );
+                              }
+                            ),
+                            nip: f.from != currentUser.uid
+                                ? BubbleNip.leftTop
+                                : BubbleNip.rightTop,
+                          )))
+                  : Container())
+              .toList(),
+        );
+      },
+    );
   }
 }

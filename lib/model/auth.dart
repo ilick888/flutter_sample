@@ -6,7 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleAuth {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser _firebaseUser;
 
   Future<FirebaseUser> handleSignIn() async {
  
@@ -31,20 +30,19 @@ class GoogleAuth {
       UserModel().firstCreateRecord(user);
 
       return user;
+
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  void signOutGoogle() async{
+  Future<void> signOutGoogle() async{
     await _googleSignIn.signOut();
     print("User Sign Out");
   }
 
-  String getCurrentUser() {
-    FirebaseAuth.instance.currentUser().then((user){
-      return user.uid;
-    });
+  Future<FirebaseUser> getCurrentUser() async {
+    return (await _auth.currentUser());
   }
 }
