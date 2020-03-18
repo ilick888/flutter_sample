@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example_app/model/user.dart';
+import 'package:example_app/screen/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ import 'package:example_app/model/auth.dart';
 import 'chat.dart';
 
 class UserList extends StatelessWidget {
-  final FirebaseUser currentUser;
+  final User currentUser;
 
   UserList({@required this.currentUser});
 
@@ -55,7 +56,7 @@ Widget body(context, currentUser) {
                               child: Image.network(f.photoUrl),
                             ),
                           ),
-                          trailing: f.phoneNumber != ''
+                          trailing: f.phoneNumber != null
                               ? IconButton(
                                   icon: Icon(Icons.call),
                                   onPressed: () {
@@ -82,13 +83,14 @@ _launchURL(String phoneNumber) {
 }
 
 class UserDrawer extends StatelessWidget {
-  final FirebaseUser currentUser;
+  final User currentUser;
   String uid;
 
   UserDrawer({@required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserModel>(context);
 
     return Drawer(
         child: Container(
@@ -115,17 +117,18 @@ class UserDrawer extends StatelessWidget {
                   ),
                 ),
                   ListTile(
-                    title: Text('プロフィール変更'),
+                    title: Text('プロフィール'),
                     onTap: (){
-                      print((GoogleAuth().getCurrentUser()).then((user){
-                        setMember(user.uid);
-                        print(this.uid);
-                      }));
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Profile(user: currentUser)));
                     },
                   ),
                 Divider(),
                 Align(
-                  alignment: FractionalOffset.bottomCenter,
+                  alignment: FractionalOffset.topLeft,
                   child: ListTile(
                     title: Text('ログアウト(アプリ終了)'),
                     onTap: () async{
@@ -133,7 +136,8 @@ class UserDrawer extends StatelessWidget {
                       exit(0);
                     },
                   ),
-                )
+                ),
+                Divider()
               ],
             ),
         )

@@ -1,21 +1,19 @@
 
 
 import 'package:example_app/model/auth.dart';
+import 'package:example_app/model/user.dart';
 import 'package:example_app/screen/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatelessWidget {
-  Future<FirebaseUser> user;
+  FirebaseUser firebaseUser;
+  User user;
 
   @override
   Widget build(BuildContext context) {
 
-    user = GoogleAuth().handleSignIn();
-    user.then((user) =>
-    user == null ? Navigator.pushReplacementNamed(context, '/login') :
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserList(currentUser: user)))
-    );
+    login(context);
 
     return Scaffold(
       body: Container(
@@ -41,5 +39,14 @@ class TopPage extends StatelessWidget {
         )
       )
     );
+  }
+
+  login(BuildContext context) async{
+    user = await GoogleAuth().handleSignIn();
+    if(user == null){
+      Navigator.pushReplacementNamed(context, '/login');
+    }else{
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserList(currentUser: user)));
+    }
   }
 }

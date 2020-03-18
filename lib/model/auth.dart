@@ -7,7 +7,7 @@ class GoogleAuth {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<FirebaseUser> handleSignIn() async {
+  Future<User> handleSignIn() async {
  
     GoogleSignInAccount googleCurrentUser = _googleSignIn.currentUser;
     try {
@@ -15,7 +15,8 @@ class GoogleAuth {
         googleCurrentUser = await _googleSignIn.signInSilently();
       if (googleCurrentUser == null)
         googleCurrentUser = await _googleSignIn.signIn();
-      if (googleCurrentUser == null) return null;
+      if (googleCurrentUser == null)
+        print(googleCurrentUser.id);
 
       GoogleSignInAuthentication googleAuth =
           await googleCurrentUser.authentication;
@@ -23,11 +24,11 @@ class GoogleAuth {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final FirebaseUser user =
+      final FirebaseUser firebaseUser =
           (await _auth.signInWithCredential(credential)).user;
-      print("signed in " + user.displayName);
+      print("signed in " + firebaseUser.displayName);
 
-      UserModel().firstCreateRecord(user);
+      Future<User> user = UserModel().firstCreateRecord(firebaseUser);
 
       return user;
 
@@ -45,4 +46,5 @@ class GoogleAuth {
   Future<FirebaseUser> getCurrentUser() async {
     return (await _auth.currentUser());
   }
+
 }
