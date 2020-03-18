@@ -1,23 +1,27 @@
 import 'package:example_app/model/auth.dart';
+import 'package:example_app/model/user.dart';
 import 'package:example_app/screen/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FrontBody(),
-      floatingActionButton: Bottom(),
     );
   }
 }
 
 class FrontBody extends StatelessWidget {
-  Future<FirebaseUser> user;
+  FirebaseUser firebaseUser;
+  User user;
 
   @override
   Widget build(BuildContext context) {
+    final UserModel userModel = Provider.of<UserModel>(context);
+
     return Container(
         color: Colors.blue[200],
         child: Center(
@@ -35,16 +39,13 @@ class FrontBody extends StatelessWidget {
               padding: EdgeInsets.all(20),
               child: Text('Googleログイン', style: TextStyle(fontSize: 20),),
               color: Colors.white,
-              onPressed: () {
-                user = GoogleAuth().handleSignIn();
-                user.then((user) => user == null
-                    ? Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('ログインしてください')))
-                    : Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                UserList(currentUser: user))));
+              onPressed: () async{
+                user = await GoogleAuth().handleSignIn();
+                if(user == null){
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text('ログインしてください')));
+                }else{
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserList(currentUser: user)));
+                }
               },
               shape: StadiumBorder(),
             ),
@@ -55,28 +56,4 @@ class FrontBody extends StatelessWidget {
   }
 }
 
-class Bottom extends StatelessWidget {
-  Future<FirebaseUser> user;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: Colors.blue[200],
-      child: Icon(Icons.add),
-      onPressed: (){
-        user = GoogleAuth().handleSignIn();
-        user.then((user){
-            user == null
-                ? Scaffold.of(context).showSnackBar(SnackBar(content: Text('ログインしてください')))
-            : Navigator.pushReplacement(context,MaterialPageRoute(
-                builder: (context) =>
-                    UserList(currentUser: user)
-            )
-            );
-        }
-        );
-      },
-    );
-  }
-}
 

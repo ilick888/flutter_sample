@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class Chat extends StatelessWidget {
   final textController = TextEditingController();
   User user;
-  FirebaseUser currentUser;
+  User currentUser;
   List<Message> messages;
 
   Chat({this.user, this.currentUser});
@@ -77,7 +77,7 @@ class Chat extends StatelessWidget {
 
 class ChatList extends StatelessWidget {
   final User user;
-  final FirebaseUser currentUser;
+  final User currentUser;
   List<Message> messages;
 
   ChatList({@required this.user, @required this.currentUser});
