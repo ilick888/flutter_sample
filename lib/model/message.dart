@@ -41,6 +41,7 @@ class MessageModel extends ChangeNotifier{
   void createRecord(Message message) async {
     message.createdAt = DateTime.now();
     await _api.addDocument(message.toJson());
+    ChangeNotifier();
   }
 
   Stream<QuerySnapshot> fetchMessagesAsStreamOrderByCreatedAt(String to, String from) {
@@ -51,4 +52,5 @@ class MessageModel extends ChangeNotifier{
     await _api.removeDocument(id) ;
     return ;
   }
+
 }

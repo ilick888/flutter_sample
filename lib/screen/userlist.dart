@@ -89,6 +89,7 @@ class UserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserModel>(context);
 
     return Drawer(
         child: Container(
@@ -117,15 +118,12 @@ class UserDrawer extends StatelessWidget {
                   ListTile(
                     title: Text('プロフィール変更'),
                     onTap: (){
-                      print((GoogleAuth().getCurrentUser()).then((user){
-                        setMember(user.uid);
-                        print(this.uid);
-                      }));
+                      userProvider.updateUser(currentUser);
                     },
                   ),
                 Divider(),
                 Align(
-                  alignment: FractionalOffset.bottomCenter,
+                  alignment: FractionalOffset.topLeft,
                   child: ListTile(
                     title: Text('ログアウト(アプリ終了)'),
                     onTap: () async{
@@ -133,7 +131,8 @@ class UserDrawer extends StatelessWidget {
                       exit(0);
                     },
                   ),
-                )
+                ),
+                Divider()
               ],
             ),
         )

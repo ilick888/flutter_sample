@@ -99,67 +99,68 @@ class ChatList extends StatelessWidget {
           reverse: true,
           children: messages
               .map((f) => f.member.contains(user.uid) &&
-                      f.member.contains(currentUser.uid)
-                  ? Container(
-                      padding: EdgeInsets.only(top: 5, bottom: 5),
-                      child: ListTile(
-                          leading: Container(
-                            width: 40,
-                            height: 40,
-                            child: f.from != currentUser.uid
-                                ? ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(100)),
-                                    child: Image.network(user.photoUrl),
-                                  )
-                                : null,
-                          ),
-                          title: Bubble(
-                            alignment: f.from != currentUser.uid
-                                ? Alignment.topLeft
-                                : Alignment.topRight,
-                            child: InkWell(
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                child: Text(f.message,
-                                  style: TextStyle(fontSize: 17)),
-                              ),
-                              onLongPress: () async{
-                                var result = await showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context){
-                                      return AlertDialog(
-                                        content: Text('本当に削除しますか'),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: Text('いいえ'),
-                                            onPressed: (){
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: Text('はい'),
-                                            onPressed: (){
-                                              messageModel.removeMessage(f.id);
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
+              f.member.contains(currentUser.uid)
+              ? Container(
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              child: ListTile(
+                  leading: Container(
+                    width: 40,
+                    height: 40,
+                    child: f.from != currentUser.uid
+                        ? ClipRRect(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(100)),
+                      child: Image.network(user.photoUrl),
+                    )
+                        : null,
+                  ),
+                  title: Bubble(
+                    alignment: f.from != currentUser.uid
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
+                    child: InkWell(
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          child: Text(f.message,
+                              style: TextStyle(fontSize: 17)),
+                        ),
+                        onLongPress: () async{
+                          await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  content: Text('本当に削除しますか'),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('いいえ'),
+                                      onPressed: (){
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('はい'),
+                                      onPressed: (){
+                                        messageModel.removeMessage(f.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
 
-                                        ],
-                                      );
-                                    }
+                                  ],
                                 );
                               }
-                            ),
-                            nip: f.from != currentUser.uid
-                                ? BubbleNip.leftTop
-                                : BubbleNip.rightTop,
-                          )))
-                  : Container())
+                          );
+                        }
+                    ),
+                    nip: f.from != currentUser.uid
+                        ? BubbleNip.leftTop
+                        : BubbleNip.rightTop,
+                  )))
+              : Container())
               .toList(),
         );
       },
     );
   }
 }
+
