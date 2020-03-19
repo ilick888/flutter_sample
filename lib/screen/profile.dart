@@ -51,8 +51,10 @@ class _Body extends StatelessWidget {
                 element('電話番号', 'phoneNumber', snapshot,context),
                 Divider(),
                 element('支店', 'phoneNumber',snapshot,context),
-                Divider()
-              ]));
+                Divider(),
+                    element('コメント', 'comment',snapshot,context),
+                    Divider(),
+                  ]));
         });
   }
 

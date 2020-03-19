@@ -64,7 +64,7 @@ Widget body(context, currentUser) {
                                   },
                                 )
                               : null,
-                          subtitle: Text(f.email),
+                          subtitle: f.comment.isNotEmpty ? Text(f.comment) : Text('初めまして！'),
                           onTap: () {
                             Navigator.push(
                                 context,

@@ -13,9 +13,10 @@ class User {
   String phoneNumber;
   String photoUrl;
   DateTime createdAt;
+  String comment;
 
 
-  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl});
+  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl,this.comment});
 
   User.fromMap(Map snapshot,String id) :
         id = id,
@@ -24,7 +25,8 @@ class User {
         email = snapshot['email'] ?? '',
         phoneNumber = snapshot['phoneNumber'],
         photoUrl = snapshot['photoUrl'] ?? '',
-        createdAt = snapshot['createdAt'].toDate() ?? null;
+        createdAt = snapshot['createdAt'].toDate() ?? null,
+        comment = snapshot['comment'] ?? '';
 
   toJson() {
     return {
@@ -35,6 +37,7 @@ class User {
       "phoneNumber" : phoneNumber,
       "photoUrl" : photoUrl,
       "createdAt": createdAt,
+      "comment" : comment,
     };
   }
 }
