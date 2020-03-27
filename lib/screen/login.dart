@@ -4,10 +4,26 @@ import 'package:example_app/screen/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyLogin extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+            _fcm.configure(
+          onMessage: (Map<String, dynamic> message) async {
+            print("onMessage: $message");
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+            print("onLaunch: $message");
+        },
+        onResume: (Map<String, dynamic> message) async {
+            print("onResume: $message");
+        },
+      );
+
     return Scaffold(
       body: FrontBody(),
     );

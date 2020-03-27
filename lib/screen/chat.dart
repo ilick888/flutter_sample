@@ -5,6 +5,7 @@ import 'package:example_app/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class Chat extends StatelessWidget {
   final textController = TextEditingController();
@@ -85,6 +86,7 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MessageModel messageModel = Provider.of<MessageModel>(context);
+    var formatter = new DateFormat('M月d日 HH:mm');
     return StreamBuilder(
       stream: messageModel.fetchMessagesAsStreamOrderByCreatedAt(
           user.uid, currentUser.uid),
@@ -114,6 +116,11 @@ class ChatList extends StatelessWidget {
                     )
                         : null,
                   ),
+                  subtitle: Container(
+                    alignment: f.from != currentUser.uid ? Alignment(-0.9,0) : Alignment(0.9,0),
+                    padding: EdgeInsets.only(top: 1),
+                      child: Text(formatter.format(f.createdAt)),
+                  ),
                   title: Bubble(
                     alignment: f.from != currentUser.uid
                         ? Alignment.topLeft
@@ -124,33 +131,7 @@ class ChatList extends StatelessWidget {
                           child: Text(f.message,
                               style: TextStyle(fontSize: 17)),
                         ),
-                        onLongPress: () async{
-                          await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context){
-                                return AlertDialog(
-                                  content: Text('本当に削除しますか'),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text('いいえ'),
-                                      onPressed: (){
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text('はい'),
-                                      onPressed: (){
-                                        messageModel.removeMessage(f.id);
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-
-                                  ],
-                                );
-                              }
-                          );
-                        }
+                        onLongPress: (){showDelete(context,messageModel,f);}
                     ),
                     nip: f.from != currentUser.uid
                         ? BubbleNip.leftTop
@@ -162,5 +143,35 @@ class ChatList extends StatelessWidget {
       },
     );
   }
+
+  Future<Widget> showDelete(context,messageModel,Message f) async{
+    return                          await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text('本当に削除しますか'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('いいえ'),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                ),
+              FlatButton(
+                child: Text('はい'),
+                onPressed: (){
+                  messageModel.removeMessage(f.id);
+                  Navigator.of(context).pop();
+                },
+                ),
+
+            ],
+            );
+        }
+        );
+
+  }
 }
+
 

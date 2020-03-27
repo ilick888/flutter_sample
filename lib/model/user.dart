@@ -14,9 +14,10 @@ class User {
   String photoUrl;
   DateTime createdAt;
   String comment;
+  String deviceToken;
 
 
-  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl,this.comment});
+  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl,this.comment, this.deviceToken});
 
   User.fromMap(Map snapshot,String id) :
         id = id,
@@ -26,7 +27,8 @@ class User {
         phoneNumber = snapshot['phoneNumber'],
         photoUrl = snapshot['photoUrl'] ?? '',
         createdAt = snapshot['createdAt'].toDate() ?? null,
-        comment = snapshot['comment'] ?? '';
+        comment = snapshot['comment'] ?? '',
+        deviceToken = snapshot['deviceToken'] ?? '';
 
   toJson() {
     return {
@@ -38,6 +40,7 @@ class User {
       "photoUrl" : photoUrl,
       "createdAt": createdAt,
       "comment" : comment,
+      "deviceToken" : deviceToken,
     };
   }
 }
@@ -47,7 +50,7 @@ class UserModel extends ChangeNotifier{
   List<User> users;
   User user;
 
-  Future<User> firstCreateRecord(FirebaseUser firebaseUser) async{
+  Future<User> firstCreateRecord(FirebaseUser firebaseUser,String _token) async{
     user = new User(
       uid: firebaseUser.uid,
       displayName: firebaseUser.displayName,
@@ -55,6 +58,7 @@ class UserModel extends ChangeNotifier{
       phoneNumber: firebaseUser.phoneNumber,
       photoUrl: firebaseUser.photoUrl,
       createdAt: DateTime.now(),
+      deviceToken : _token,
     );
     final QuerySnapshot result = await Future.value(_api.getDataCollectionWhere(user.uid, 'uid'));
     if(result.documents.isEmpty){

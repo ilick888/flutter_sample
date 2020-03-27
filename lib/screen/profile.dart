@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:example_app/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +50,7 @@ class _Body extends StatelessWidget {
                 Divider(),
                 element('電話番号', 'phoneNumber', snapshot,context),
                 Divider(),
-                element('支店', 'phoneNumber',snapshot,context),
+                element('支店', '',snapshot,context),
                 Divider(),
                     element('コメント', 'comment',snapshot,context),
                     Divider(),
