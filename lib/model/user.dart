@@ -15,9 +15,10 @@ class User {
   DateTime createdAt;
   String comment;
   String deviceToken;
+  bool employee;
 
 
-  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl,this.comment, this.deviceToken});
+  User({@required this.uid, this.createdAt, this.displayName, this.email, this.phoneNumber, this.photoUrl,this.comment, this.deviceToken, this.employee});
 
   User.fromMap(Map snapshot,String id) :
         id = id,
@@ -28,7 +29,8 @@ class User {
         photoUrl = snapshot['photoUrl'] ?? '',
         createdAt = snapshot['createdAt'].toDate() ?? null,
         comment = snapshot['comment'] ?? '',
-        deviceToken = snapshot['deviceToken'] ?? '';
+        deviceToken = snapshot['deviceToken'] ?? '',
+        employee = snapshot['employee'] ?? false;
 
   toJson() {
     return {
@@ -41,6 +43,7 @@ class User {
       "createdAt": createdAt,
       "comment" : comment,
       "deviceToken" : deviceToken,
+      "employee" : employee,
     };
   }
 }
@@ -62,11 +65,14 @@ class UserModel extends ChangeNotifier{
     );
     final QuerySnapshot result = await Future.value(_api.getDataCollectionWhere(user.uid, 'uid'));
     if(result.documents.isEmpty){
-      await _api.addDocument(user.toJson());
+      var aaa = await _api.addDocument(user.toJson());
+      DocumentSnapshot doc = await _api.getDocumentById(aaa.documentID);
+      user = User.fromMap(doc.data, doc.documentID);
     } else {
       DocumentSnapshot doc = await _api.getDocumentById(result.documents.first.documentID);
       user = User.fromMap(doc.data, doc.documentID);
       user.createdAt = DateTime.now();
+      user.deviceToken = _token;
       _api.updateDocument(user.toJson(), user.id);
       print(result.documents.first['uid']);
     }

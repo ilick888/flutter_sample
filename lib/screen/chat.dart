@@ -23,38 +23,46 @@ class Chat extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(title: Text('To ' + user.displayName)),
-        body: Padding(
-          child: Column(children: [
+        body: Container(
+          child: GestureDetector(
+            onTap: (){FocusScope.of(context).requestFocus(new FocusNode());},
+            child : Column(children: [
             Expanded(
                 child: ChatList(
               user: user,
               currentUser: currentUser,
             )),
-            bottom(messageModel)
+            bottom(messageModel,context)
           ]),
-          padding: EdgeInsets.all(10),
-        ));
+        )));
   }
 
-  Widget bottom(MessageModel messageModel) {
+  Widget bottom(MessageModel messageModel,BuildContext context) {
     return Stack(children: <Widget>[
       Container(
           decoration: BoxDecoration(color: Colors.white),
           padding:
-              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+              EdgeInsets.only(top: 10.0, bottom: 20.0, left: 15.0, right: 15.0),
           child: Row(
             children: <Widget>[
               Flexible(
-                flex: 13,
+                flex: 14,
                 child: TextFormField(
                   controller: textController,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                    )
+                  ),
                 ),
               ),
-              Flexible(child: Container()),
+              SizedBox(
+                width: 10,
+              ),
               Flexible(
                 flex: 3,
                 child: FlatButton(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(15.0),
                   color: Colors.blue,
                   onPressed: () {
                     if (textController.text != '') {
@@ -67,7 +75,7 @@ class Chat extends StatelessWidget {
                       ..clearComposing()
                       ..clear();
                   },
-                  child: Text('送信'),
+                  child: Text('送信', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 11)),
                 ),
               ),
             ],

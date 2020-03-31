@@ -11,9 +11,8 @@ class Message {
   List member;
   String message;
   DateTime createdAt;
-  DocumentReference aaa;
 
-  Message({this.from, this.to, this.message, this.createdAt, member});
+  Message({this.from, this.to, this.message, this.createdAt, this.member});
 
   Message.fromMap(Map snapshot,String id) :
         id = id ?? '',

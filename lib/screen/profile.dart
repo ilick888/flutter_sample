@@ -54,6 +54,8 @@ class _Body extends StatelessWidget {
                 Divider(),
                     element('コメント', 'comment',snapshot,context),
                     Divider(),
+                    element('社員', 'employee',snapshot,context),
+                    Divider(),
                   ]));
         });
   }
@@ -73,13 +75,15 @@ class _Body extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(left: 20, bottom: 10),
           child:
-               Text(snapshot.data[content] ?? 'なし' , style: TextStyle(fontSize: 15, color: Colors.blue)),
+               Text(snapshot.data[content] != null ? snapshot.data[content].toString() ?? 'なし' : 'なし' , style: TextStyle(fontSize: 15, color: Colors.blue)),
         ),
       ],
     ),
       onTap: (){
+          if(title != "社員"){
           User currentUser = User.fromMap(snapshot.data.data,snapshot.data.documentID);
           Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(user: currentUser, content: content, title: title,)));
+          }
       },
         );
   }
