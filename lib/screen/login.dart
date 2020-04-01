@@ -3,7 +3,6 @@ import 'package:example_app/model/user.dart';
 import 'package:example_app/screen/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyLogin extends StatelessWidget {
@@ -36,7 +35,6 @@ class FrontBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserModel userModel = Provider.of<UserModel>(context);
 
     return Container(
         color: Colors.blue[200],

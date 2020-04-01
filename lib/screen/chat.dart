@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class Chat extends StatelessWidget {
   final textController = TextEditingController();
   User user;
@@ -84,6 +85,7 @@ class Chat extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ChatList extends StatelessWidget {
   final User user;
   final User currentUser;
