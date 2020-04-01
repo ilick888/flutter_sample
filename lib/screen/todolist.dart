@@ -30,7 +30,6 @@ class BottomFloatButton extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  List<Todo> todos;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +38,9 @@ class Body extends StatelessWidget {
       stream: todoProvider.fetchTodosAsStreamOrderByCreatedAt(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(snapshot.data == null){return CircularProgressIndicator();}
-        todos = snapshot.data.documents.map((doc) => Todo.fromMap(doc.data, doc.documentID)).toList();
+        List<Todo> todos = snapshot.data.documents.map((doc) => Todo.fromMap(doc.data, doc.documentID)).toList();
         return ListView(
-            children: todos.map((f) => Card(child: 
+            children: todos.map((f) => Card(child:
             ListTile(
               title: Text(f.title), 
               subtitle: Text(f.createdAt.toIso8601String()),

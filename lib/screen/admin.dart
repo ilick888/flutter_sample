@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example_app/model/message.dart';
-import 'package:example_app/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class Admin extends StatelessWidget {
-  final textController = TextEditingController();
-  List<Message> messages;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +22,7 @@ class Admin extends StatelessWidget {
 }
 
 class ChatList extends StatelessWidget {
-  List<Message> messages;
-  List<User> users;
-  var formatter = new DateFormat('M月d日 HH:mm');
+  final formatter = new DateFormat('M月d日 HH:mm');
 
 
   @override
@@ -40,7 +35,7 @@ class ChatList extends StatelessWidget {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        messages = snapshot.data.documents
+        List<Message> messages = snapshot.data.documents
             .map((doc) => Message.fromMap(doc.data, doc.documentID))
             .toList();
         return ListView(

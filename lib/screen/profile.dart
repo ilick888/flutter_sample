@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {
-  User user;
+  final User user;
 
   Profile({@required this.user});
 
@@ -18,7 +18,7 @@ class Profile extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  User user;
+  final User user;
 
   _Body({@required this.user});
 
@@ -90,9 +90,9 @@ class _Body extends StatelessWidget {
 }
 
 class EditProfile extends StatelessWidget {
-  String content;
-  String title;
-  User user;
+  final String content;
+  final String title;
+  final User user;
 
   EditProfile({@required this.content, this.user, this.title});
 

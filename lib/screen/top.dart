@@ -3,12 +3,9 @@
 import 'package:example_app/model/auth.dart';
 import 'package:example_app/model/user.dart';
 import 'package:example_app/screen/userlist.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatelessWidget {
-  FirebaseUser firebaseUser;
-  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +39,7 @@ class TopPage extends StatelessWidget {
   }
 
   login(BuildContext context) async{
-    user = await GoogleAuth().handleSignIn();
+    User user = await GoogleAuth().handleSignIn();
     if(user == null){
       Navigator.pushReplacementNamed(context, '/login');
     }else{

@@ -113,7 +113,6 @@ _launchURL(String phoneNumber) {
 @immutable
 class UserDrawer extends StatelessWidget {
   final User currentUser;
-  String uid;
 
   UserDrawer({@required this.currentUser});
 
@@ -175,9 +174,5 @@ class UserDrawer extends StatelessWidget {
         ],
       ),
     ));
-  }
-
-  void setMember(uid) {
-    this.uid = uid;
   }
 }

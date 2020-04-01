@@ -1,7 +1,6 @@
 import 'package:example_app/model/auth.dart';
 import 'package:example_app/model/user.dart';
 import 'package:example_app/screen/userlist.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -29,10 +28,8 @@ class MyLogin extends StatelessWidget {
   }
 }
 
-@immutable
+
 class FrontBody extends StatelessWidget {
-  FirebaseUser firebaseUser;
-  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +52,7 @@ class FrontBody extends StatelessWidget {
               child: Text('Googleログイン', style: TextStyle(fontSize: 20),),
               color: Colors.white,
               onPressed: () async{
-                user = await GoogleAuth().handleSignIn();
+                 final User user = await GoogleAuth().handleSignIn();
                 if(user == null){
                   Scaffold.of(context).showSnackBar(SnackBar(content: Text('ログインしてください')));
                 }else{
