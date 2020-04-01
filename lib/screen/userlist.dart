@@ -110,6 +110,7 @@ _launchURL(String phoneNumber) {
   launch('tel:' + phoneNumber);
 }
 
+@immutable
 class UserDrawer extends StatelessWidget {
   final User currentUser;
   String uid;
@@ -118,7 +119,6 @@ class UserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserModel>(context);
 
     return Drawer(
         child: Container(

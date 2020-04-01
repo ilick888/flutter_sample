@@ -29,6 +29,7 @@ class MyLogin extends StatelessWidget {
   }
 }
 
+@immutable
 class FrontBody extends StatelessWidget {
   FirebaseUser firebaseUser;
   User user;

@@ -11,7 +11,6 @@ class Admin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MessageModel messageModel = Provider.of<MessageModel>(context);
 
     return Scaffold(
         appBar: AppBar(title: Text('管理画面')),
