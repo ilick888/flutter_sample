@@ -26,13 +26,14 @@ class UserList extends StatelessWidget {
         body: Column(children: [
           Expanded(child: body(context, currentUser)),
           Stack(children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(bottom: 20),
-              child: InkWell(
-                onTap: (){launch("https://www.musashi-sec.co.jp/");},
-                child: Image.network("https://imgur.com/t2ODNvm.jpg"),
+              Container(
+                color: Colors.black26,
+                padding: EdgeInsets.only(top:8,bottom: 10),
+                child: InkWell(
+                  onTap: (){launch("https://www.musashi-sec.co.jp/");},
+                  child:Image.network("https://imgur.com/t2ODNvm.jpg"),
+                  )
               )
-            )
           ],)
         ]));
   }
