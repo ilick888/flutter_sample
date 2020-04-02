@@ -12,7 +12,7 @@ import Flutter
       UNUserNotificationCenter.current().delegate = self
 
       let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-      UNUserNotificationCenter.current().requestAuthorization(
+      UNUserNotificationCentnt().requestAuthorization(
         options: authOptions,
         completionHandler: {_, _ in })
     } else {
